@@ -22,7 +22,7 @@ const registerUser = async (req, res) => {
     // Generate token for instant login after signup
     const token = jwt.sign(
       { id: user.id, name: user.name, username: user.username, role: user.role || 'user' }, 
-      process.env.JWT_SECRET, 
+      process.env.JWT_SECRET || 'supersecretkey_tracking_2026', 
       { expiresIn: '30d' }
     );
     
@@ -67,7 +67,7 @@ const loginUser = async (req, res) => {
     
     const token = jwt.sign(
       { id: user.id, name: user.name, username: user.username, role: user.role || 'user' }, 
-      process.env.JWT_SECRET, 
+      process.env.JWT_SECRET || 'supersecretkey_tracking_2026', 
       { expiresIn: '30d' }
     );
     
