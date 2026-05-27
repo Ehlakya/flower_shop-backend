@@ -38,21 +38,15 @@ const pool = new Pool({
   },
 });
 
-// Test connection on startup
 const testConnection = async () => {
   try {
-    const res = await pool.query("SELECT NOW()");
-    console.log("✅ Database Connected successfully");
-    console.log(res.rows[0]);
+    await pool.query("SELECT NOW()");
+    console.log("✅ Database Connected Successfully");
   } catch (err) {
-    console.error("❌ Database Connection Error:", err.message);
-    console.error("Detailed Error:", err);
+    console.error("❌ Database Connection Error:", err);
   }
 };
 
 testConnection();
 
-module.exports = {
-  query: (text, params) => pool.query(text, params),
-  pool,
-};
+module.exports = pool;
