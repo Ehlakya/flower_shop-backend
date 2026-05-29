@@ -27,6 +27,11 @@ const initDB = async () => {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `);
+    
+    // Ensure description column exists if table was already created
+    await db.query(`
+      ALTER TABLE products ADD COLUMN IF NOT EXISTS description TEXT;
+    `);
     console.log('✅ Products table ready');
 
     // Cart Table
