@@ -23,7 +23,8 @@ const initDB = async () => {
         price NUMERIC(10, 2) NOT NULL,
         category VARCHAR(50),
         image VARCHAR(255),
-        description TEXT
+        description TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `);
     console.log('✅ Products table ready');

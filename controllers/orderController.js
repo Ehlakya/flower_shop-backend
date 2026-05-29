@@ -8,7 +8,7 @@ const createOrder = async (req, res) => {
     return res.status(401).json({ error: 'User must be logged in to place an order.' });
   }
 
-  const client = await db.pool.connect();
+  const client = await db.connect();
   
   try {
     console.log(`\n📦 Initializing Order for User ID: ${userId}`);

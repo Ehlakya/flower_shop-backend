@@ -25,7 +25,10 @@ const io = new Server(server, {
 app.set("socketio", io);
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: "https://flower-shop-frontend-sand.vercel.app",
+  credentials: true
+}));
 app.use(express.json());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 

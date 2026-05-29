@@ -16,7 +16,7 @@ const seedDatabase = async () => {
     const adminEmail = 'admin@example.com';
 
     console.log(`👤 Seeding admin user: '${adminUsername}'...`);
-    
+
     // Check if the admin user already exists
     const userCheck = await db.query('SELECT * FROM users WHERE username = $1', [adminUsername]);
     
