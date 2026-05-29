@@ -128,6 +128,9 @@ app.get("/", (req, res) => {
   res.send("Backend Running Successfully 🚀");
 });
 
+const initDB = require("./config/initDb");
+initDB();
+
 server.listen(PORT, () => {
   console.log(`
 🚀 Server running on http://localhost:${PORT}
