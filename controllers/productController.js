@@ -32,6 +32,8 @@ const getProductById = async (req, res) => {
 
 const addProduct = async (req, res) => {
   // Multer stores original text fields in req.body and the file in req.file
+  console.log("Add Product Request - Body:", req.body);
+  console.log("Add Product Request - File:", req.file);
   const { name, price, category, description } = req.body;
   const image = req.file ? req.file.filename : null; // Save filename only
 
@@ -43,8 +45,10 @@ const addProduct = async (req, res) => {
     const newProduct = await Product.create(name, price, category, image, description);
     res.status(201).json({ message: 'Product added successfully', product: newProduct });
   } catch (error) {
-    console.error('❌ Add Product Error:', error);
-    res.status(500).json({ message: 'Failed to add product', error: error.message });
+    console.error("Create Product Error:", error);
+    res.status(500).json({
+      message: error.message
+    });
   }
 };
 
