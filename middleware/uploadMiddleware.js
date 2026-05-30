@@ -20,18 +20,51 @@ const storage = multer.diskStorage({
 
 // File filter (images only)
 const fileFilter = (req, file, cb) => {
-  const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
-  if (allowedTypes.includes(file.mimetype)) {
+  // Log file name and MIME type before validation
+  console.log(`🔍 [Upload Validation] File Name: ${file.originalname}, MIME Type: ${file.mimetype}`);
+
+  const allowedMimeTypes = [
+    'image/jpeg',
+    'image/jpg',
+    'image/png',
+    'image/webp',
+    'image/avif',
+    'image/svg+xml'
+  ];
+
+  const ext = path.extname(file.originalname).toLowerCase();
+  const allowedExtensions = ['.jpg', '.jpeg', '.png', '.webp', '.avif', '.svg'];
+
+  if (allowedMimeTypes.includes(file.mimetype) || allowedExtensions.includes(ext)) {
     cb(null, true);
   } else {
-    cb(new Error('Invalid file type. Only JPG, PNG, and WebP are allowed.'), false);
+    cb(new Error('Unsupported image format. Allowed formats: JPG, PNG, WebP, AVIF, SVG'), false);
   }
 };
 
-const upload = multer({
+const uploadInstance = multer({
   storage: storage,
   fileFilter: fileFilter,
   limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
 });
 
-module.exports = upload;
+// Wrap the single middleware to handle errors and return standard JSON instead of crashing
+const originalSingle = uploadInstance.single;
+uploadInstance.single = (fieldName) => {
+  const middleware = originalSingle.call(uploadInstance, fieldName);
+  return (req, res, next) => {
+    middleware(req, res, (err) => {
+      if (err) {
+        console.error('❌ Multer Upload Error:', err.message);
+        return res.status(400).json({
+          success: false,
+          message: err.message || 'Unsupported image format. Allowed formats: JPG, PNG, WebP, AVIF, SVG'
+        });
+      }
+      next();
+    });
+  };
+};
+
+module.exports = uploadInstance;
+
